@@ -51,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Bitmap generatedImageBitmap;
 
+    // Declare native method
+    public native String getSecretKey();
+
+    static {
+        // Load the native library (.so file)
+        System.loadLibrary("text2image");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,7 +179,8 @@ public class MainActivity extends AppCompatActivity {
         binding.progressBar.setVisibility(View.VISIBLE);
 
         ApiService apiService = RetrofitClient.getInstance().getApiService();
-        String API_KEY = "c0957e34a11786192e8819a7d4faef725c3a0becf05716823b30e37111196e92ba1953a695dddd761cce8abbffefce40da8059d06aa651a02f9cc3322a7d1e0b";
+        String API_KEY = getSecretKey();
+
         // Step 1: Authenticate
         apiService.authenticate(API_KEY).enqueue(new Callback<AuthResponse>() {
             @Override
